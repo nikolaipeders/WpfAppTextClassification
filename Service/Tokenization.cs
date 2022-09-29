@@ -44,7 +44,7 @@ namespace WpfAppTextClassification.Service
         public static string RemovePunctuation(string token)
         {
             token = token.Trim();
-            char[] punctuations = {'.', ',', '"', '?','\n'};
+            char[] punctuations = {'.', ',', '"', '!', '?','\n'};
             
             for (int i = 0; i < punctuations.Length; i++)
             {

@@ -25,7 +25,7 @@ namespace WpfAppTextClassification.ViewModel
 
         public FileListViewModel()
         {
-            _fileAdapter = new TextFile("txt");
+            _fileAdapter = new TextFile("txt"); 
 
             FilesCollectionA = new ObservableCollection<string>(_fileAdapter.GetAllFileNames("ClassA"));
 

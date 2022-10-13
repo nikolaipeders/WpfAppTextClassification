@@ -70,7 +70,6 @@ namespace WpfAppTextClassification.Service
                 {
                     text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
                 }
-
                 return text.ToString();
             }
         }

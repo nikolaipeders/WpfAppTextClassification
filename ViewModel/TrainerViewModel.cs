@@ -22,8 +22,12 @@ namespace WpfAppTextClassification.ViewModel
         private string _selectedString;
         private string _textInFile;
         private string _category;
+        private string _expected;
+        private string _succesRate;
         private string _numberOfTokens;
         private FileAdapter _fileAdapter;
+        private double _numberOfResults;
+        private double _successResults;
 
 
         public TrainerViewModel()
@@ -50,7 +54,16 @@ namespace WpfAppTextClassification.ViewModel
                 {
                     TextInFile = _fileAdapter.GetAllTextFromFileA(value);
                 }
+                if (value.Contains("\\A\\"))
+                {
+                    Expected = "Expected: Class A";
+                }
+                else if (value.Contains("\\B\\"))
+                {
+                    Expected = "Expected: Class B";
+                }
                 _selectedString = value;
+                
                 propertyIsChanged();
             }
         }
@@ -90,7 +103,33 @@ namespace WpfAppTextClassification.ViewModel
             }
             set
             {
-                _category = value;
+                _category = "Categorized as: " + value;
+                propertyIsChanged();
+            }
+        }
+
+        public string Expected
+        {
+            get
+            {
+                return _expected;
+            }
+            set
+            {
+                _expected = value;
+                propertyIsChanged();
+            }
+        }
+
+        public string SuccessRate
+        {
+            get
+            {
+                return _succesRate;
+            }
+            set
+            {
+                _succesRate = value;
                 propertyIsChanged();
             }
         }
@@ -107,7 +146,14 @@ namespace WpfAppTextClassification.ViewModel
 
         public void Categorize()
         {
+            _numberOfResults++;
+
             Category = Categorizer.CategorizeText(TextInFile);
+            if (Category.Substring(Category.Length-7).Contains(Expected.Substring(Expected.Length - 7)))
+            {
+                _successResults++;
+            }
+            SuccessRate = "Success rate: " + _successResults / _numberOfResults * 100;
         }
 
         public ICommand FileFetcherCMD { get; set; }

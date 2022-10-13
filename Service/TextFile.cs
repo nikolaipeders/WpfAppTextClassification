@@ -9,7 +9,7 @@ namespace WpfAppTextClassification.Service
 {
     public class TextFile:FileAdapter
     {
-        const string PROJECTPATH = "C:\\Users\\nikol\\OneDrive\\Projects\\Mini Project Uge 39\\WpfAppTextClassification\\bin\\Debug\\net6.0-windows\\";
+        const string PROJECTPATH = "C:\\Users\\nikol\\OneDrive\\Projects\\Project Week 40\\WpfAppTextClassification\\bin\\Debug\\net6.0-windows\\";
 
         const string FOLDERA = "ClassA";
         const string FOLDERB = "ClassB";
@@ -32,6 +32,11 @@ namespace WpfAppTextClassification.Service
         public string GetFilePathA(string fileName)
         {
             return @PROJECTPATH + FOLDERA + "\\" + fileName + "."+base.GetFileType();
+        }
+
+        public string GetFilePathB(string fileName)
+        {
+            return @PROJECTPATH + FOLDERB + "\\" + fileName + "." + base.GetFileType();
         }
 
         public override string GetAllTextFromFileA(string path)

@@ -28,5 +28,15 @@ namespace WpfAppTextClassification.Model
         {
             _vectorsInB.Add(vector);
         }
+
+        public List<List<bool>> GetVectorsInA()
+        {
+            return _vectorsInA;
+        }
+
+        public List<List<bool>> GetVectorsInB()
+        {
+            return _vectorsInB;
+        }
     }
 }

@@ -19,42 +19,11 @@ namespace WpfAppTextClassification.ViewModel
     {
         public MainWindowViewModel()
         {
-            TrainCMD = new DelegateCommand(TrainAI);
         }
-        private void TrainAI()
-        {
-            ((App)App.Current).ChangeUserControl(typeof(TrainerViewModel));
-
-            KnowledgeBuilder nb = new KnowledgeBuilder();
-
-            // initiate the learning process
-
-            nb.Train();
-
-            // getting the (whole) knowledge found in ClassA and in ClassB
-            Knowledge k = nb.GetKnowledge();
-
-            // get a part of the knowledge - here just for debugging
-            BagOfWords bof = k.GetBagOfWords();
-
-            List<string> entries = bof.GetEntriesInDictionary();
-
-            DictionaryViewModel.Dictionary.Clear();
-
-            foreach (string entry in entries)
-            {
-                DictionaryViewModel.Dictionary.Add(entry);
-            }
-
-            TrainerViewModel.timer.Stop();
-
-            TrainerViewModel.InfoText = "Completed";
-        }
-
-        public ICommand TrainCMD { get; set; }
 
         public ICommand ChangePageToDictionaryViewCMD { get; set; } = new DelegateCommand(() => { ((App)App.Current).ChangeUserControl(typeof(DictionaryViewModel)); });
-
         public ICommand ChangePageToFileListViewCMD { get; set; } = new DelegateCommand(() => { ((App)App.Current).ChangeUserControl(typeof(FileListViewModel)); });
+        public ICommand ChangePageToTrainerViewCMD { get; set; } = new DelegateCommand(() => { ((App)App.Current).ChangeUserControl(typeof(TrainerViewModel)); });
+        public ICommand ChangePageToVectorViewCMD { get; set; } = new DelegateCommand(() => { ((App)App.Current).ChangeUserControl(typeof(VectorViewModel)); });
     }
 }

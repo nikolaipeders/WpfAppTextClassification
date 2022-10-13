@@ -15,6 +15,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Margin="5,0,0,0" Text="ClassA">
         </TextBlock>
@@ -48,5 +49,9 @@
         </Border>
         <TextBlock Grid.Row="6"  Margin="5,0,0,0" Text="{Binding NumberOfTokens, Mode=TwoWay}">
         </TextBlock>
+
+        <Button Grid.Row="7" Height="20" Content="Train AI" HorizontalAlignment="Stretch" Margin="5 5 5 5"
+                    Background="#78C5EF" Foreground="White" BorderBrush="Transparent" FontSize="12" Command="{Binding TrainCMD}">
+        </Button>
     </Grid>
 </UserControl>  

@@ -68,7 +68,9 @@ namespace WpfAppTextClassification.ViewModel
                 List<string> wordsInFile = Tokenization.Tokenize(text);
                 foreach (string word in wordsInFile)
                 {
-                    _bagOfWords.InsertEntry(word);
+                    // stemming algorith here
+                    var trimmedWord = StringOperations.PerformStemming(word);
+                    _bagOfWords.InsertEntry(trimmedWord);
                 }
             }
         }
@@ -106,7 +108,7 @@ namespace WpfAppTextClassification.ViewModel
                         text = _fileAdapter.GetAllTextFromFileA(_fileLists.GetA()[i]);
                     }
                     else{
-                        text = _fileAdapter.GetAllTextFromFileB(_fileLists.GetA()[i]);
+                        text = _fileAdapter.GetAllTextFromFileB(_fileLists.GetB()[i]);
                     }
                     List<string> wordsInFile = Tokenization.Tokenize(text);
                     if (wordsInFile.Contains(key)){
@@ -149,6 +151,11 @@ namespace WpfAppTextClassification.ViewModel
         public override Knowledge GetKnowledge()
         {
             return _knowledge;
+        }
+
+        public Vectors GetVectors()
+        {
+            return _vectors;
         }
     }
 }

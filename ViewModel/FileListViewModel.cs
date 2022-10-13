@@ -7,7 +7,9 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
+using WpfAppTextClassification.Model;
 using WpfAppTextClassification.Service;
 using WpfAppTextClassification.Tools;
 
@@ -25,6 +27,8 @@ namespace WpfAppTextClassification.ViewModel
 
         public FileListViewModel()
         {
+            TrainCMD = new DelegateCommand(TrainAI);
+
             _fileAdapter = new TextFile("txt"); 
 
             FilesCollectionA = new ObservableCollection<string>(_fileAdapter.GetAllFileNames("ClassA"));
@@ -110,5 +114,38 @@ namespace WpfAppTextClassification.ViewModel
                 propertyIsChanged();
             }
         }
+        private void TrainAI()
+        {
+            KnowledgeBuilder nb = new KnowledgeBuilder();
+
+            // initiate the learning process
+            nb.Train();
+
+            // getting the (whole) knowledge found in ClassA and in ClassB
+            Knowledge k = nb.GetKnowledge();
+
+            // get a part of the knowledge - here just for debugging
+            BagOfWords bof = k.GetBagOfWords();
+            Categorizer.bagOfWords = k.GetBagOfWords();
+
+            List<string> entries = bof.GetEntriesInDictionary();
+
+            DictionaryViewModel.Dictionary.Clear();
+
+            foreach (string entry in entries)
+            {
+                DictionaryViewModel.Dictionary.Add(entry);
+            }
+
+            Vectors vectors = new Vectors();
+            vectors = nb.GetVectors();
+            Categorizer.vectors = vectors;
+
+            VectorViewModel.VectorA = vectors.GetVectorsInA().SelectMany(x => x).ToList();
+
+            VectorViewModel.VectorB = vectors.GetVectorsInB().SelectMany(x => x).ToList();
+        }
+
+        public ICommand TrainCMD { get; set; }
     }
 }

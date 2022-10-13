@@ -27,6 +27,7 @@ namespace WpfAppTextClassification
             ServiceContainer.Register<FileListViewModel>(() => new FileListViewModel());
             ServiceContainer.Register<DictionaryViewModel>(() => new DictionaryViewModel());
             ServiceContainer.Register<TrainerViewModel>(() => new TrainerViewModel());
+            ServiceContainer.Register<VectorViewModel>(() => new VectorViewModel());
         }
 
         public void ChangeUserControl(Type viewModelType)

@@ -1,68 +1,117 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
+using WpfAppTextClassification.Service;
 using WpfAppTextClassification.Tools;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace WpfAppTextClassification.ViewModel
 {
     public class TrainerViewModel : Bindable
     {
-        private string _timespan = "00:00:00";
-        private static string _infoText = "";
-        public static TimeSpan ts = new TimeSpan();
-        public static DispatcherTimer timer = new DispatcherTimer();
-        public static Stopwatch stopWatch = new Stopwatch();
+        private string _selectedString;
+        private string _textInFile;
+        private string _category;
+        private string _numberOfTokens;
+        private FileAdapter _fileAdapter;
+
 
         public TrainerViewModel()
         {
+            _fileAdapter = new TextFile("txt");
 
-            InfoText = "Training ...";
-
-            timer.Interval = TimeSpan.FromMilliseconds(1);
-            timer.Tick += stopwatchRunner;
-            timer.Start();
+            FileFetcherCMD = new DelegateCommand(FileFetcher);
+            CategorizeCMD = new DelegateCommand(Categorize);
         }
 
-        public string TimeSpanText
+        public string SelectedString
         {
             get
             {
-                return _timespan;
+                return _selectedString;
             }
             set
-            {
-                _timespan = value;
+            {                
+                if (value.EndsWith(".pdf"))
+                {
+                    TextInFile = StringOperations.ConvertPDFToString(value);                    
+                }
+                else
+                {
+                    TextInFile = _fileAdapter.GetAllTextFromFileA(value);
+                }
+                _selectedString = value;
                 propertyIsChanged();
             }
         }
 
-        public static string InfoText
+        public string TextInFile
         {
             get
             {
-                return _infoText;
+                return _textInFile;
             }
             set
             {
-                _infoText = value;
+                _textInFile = value;
+                NumberOfTokens = "Number of tokens: " + Tokenization.Tokenize(value).Count();
+                propertyIsChanged();
             }
         }
 
-        public void stopwatchRunner(object sender, EventArgs e)
+        public string NumberOfTokens
         {
-            if (stopWatch.IsRunning)
+            get
             {
-                ts = stopWatch.Elapsed;
-                TimeSpanText = ts.ToString("mm':'ss':'ff");
+                return _numberOfTokens;
             }
-            else
+            set
             {
-                stopWatch.Restart();
+                _numberOfTokens = value;
+                propertyIsChanged();
             }
         }
+
+        public string Category
+        {
+            get
+            {
+                return _category;
+            }
+            set
+            {
+                _category = value;
+                propertyIsChanged();
+            }
+        }
+
+
+        public void FileFetcher()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                SelectedString = openFileDialog.FileName;
+            }
+        }
+
+        public void Categorize()
+        {
+            Category = Categorizer.CategorizeText(TextInFile);
+        }
+
+        public ICommand FileFetcherCMD { get; set; }
+
+        public ICommand CategorizeCMD { get; set; }
     }
 }
